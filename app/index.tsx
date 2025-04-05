@@ -11,14 +11,21 @@ import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import Logo from "@/components/Logo";
 import PrimaryButton from "@/components/ui/Button";
+import { useNavigation, useRouter } from "expo-router";
 
 export default function HomeScreen() {
+
+	const navigation = useNavigation();
+	const router = useRouter();
+
 	const handleGoogleSignIn = async () => {
 		try {
 			await GoogleSignin.hasPlayServices();
 			const response = await GoogleSignin.signIn();
 			if (isSuccessResponse(response)) {
 				console.log("User Info: ", response.data);
+				// Navigate to the home screen or perform any action after successful sign-in
+				router.push("/home");
 			}
 		} catch (error) {}
 	};

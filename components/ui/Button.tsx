@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 
 const PrimaryButton = ({text, action}: {text: string, action: any}) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onTouchEnd={action}>
         <Text style={styles.text}>
             {text}
         </Text>
