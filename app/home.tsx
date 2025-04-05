@@ -35,7 +35,6 @@ export default function HomeScreen() {
 
 	return (
 		<ThemedView style={styles.homeContainer}>
-			<Logo withText={true}/>
 			{/* <GoogleSigninButton
 				size={GoogleSigninButton.Size.Wide}
 				color={GoogleSigninButton.Color.Dark}

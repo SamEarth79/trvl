@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
         borderWidth: 2,
         backgroundColor: Colors.dark.primary,
-        width: "80%",
+        width: "100%",
     },
     text: {
         color: Colors.light.text,
