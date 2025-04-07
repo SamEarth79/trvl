@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import {
 	GoogleSignin,
 	isSuccessResponse,
@@ -14,7 +14,6 @@ import PrimaryButton from "@/components/ui/Button";
 import { useNavigation, useRouter } from "expo-router";
 
 export default function HomeScreen() {
-
 	const navigation = useNavigation();
 	const router = useRouter();
 
@@ -42,20 +41,16 @@ export default function HomeScreen() {
 
 	return (
 		<ThemedView style={styles.homeContainer}>
-			<Logo withText={true}/>
-			<View style={{ width: "90%", paddingHorizontal: 20, position: "absolute", bottom: 40 }}>
+			<View style={styles.logoContainer}>
+				<Logo width={150} height={120} withText={true} />
+			</View>
+			<View style={styles.button}>
 				<PrimaryButton
 					text="Get Started"
 					action={() => {
 						handleGoogleSignIn();
 					}}
 				/>
-			</View>
-			<View style={styles.features}>
-				<Text style={styles.featureText}>Manage Itinerary</Text>
-				<Text style={styles.featureText}>Track Expenses and Splits</Text>
-				<Text style={styles.featureText}>Quick Access Files</Text>
-				<Text style={styles.featureText}>Share with Friends</Text>
 			</View>
 		</ThemedView>
 	);
@@ -67,24 +62,32 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: Colors.dark.background,
+		backgroundColor: Colors.light.background,
 		height: "100%",
 		gap: 80,
-		paddingTop: 20,
+	},
+	logoContainer: {
+		paddingBottom: 20,
 	},
 	features: {
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "flex-start",
-		backgroundColor: Colors.dark.background,
+		backgroundColor: Colors.light.background,
 		gap: 20,
 	},
 	featureText: {
-		color: Colors.dark.text,
+		color: Colors.light.text,
 		fontSize: 16,
 		textAlign: "left",
 		paddingHorizontal: 20,
-		backgroundColor: Colors.dark.background,
+		backgroundColor: Colors.light.background,
+	},
+	button: {
+		width: "90%",
+		paddingHorizontal: 20,
+		position: "absolute",
+		bottom: 100,
 	},
 });

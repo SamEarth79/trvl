@@ -1,38 +1,48 @@
 import React from "react";
 import { ThemedView } from "./ThemedView";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { Colors } from "@/constants/Colors";
 import TextLogo from "../assets/images/logofile"
 
-const Logo = ({ withText = false }) => {
+const Logo = ({ withText = false, width, height } : {withText: Boolean, width: Number, height: Number}) => {
 	return (
-		<ThemedView>
-			<TextLogo />
+		<ThemedView style={styles.logoContainer}>
+			<View style={styles.logo}>
+				<TextLogo width={width} height={height}/>
+			</View>
 			{withText && (
-				<ThemedText style={styles.text}>
-					Focus on the fun. {"\n"}We'll manage the details.
-				</ThemedText>
+				<>
+					<ThemedText style={styles.text}>
+						Focus on the fun. 
+					</ThemedText>
+					<ThemedText style={styles.text}>
+						We'll manage the details.
+					</ThemedText>
+				</>
 			)}
 		</ThemedView>
 	);
 };
 
 const styles = StyleSheet.create({
+	logoContainer: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: Colors.light.background,
+	},
 	logo: {
-		backgroundColor: Colors.dark.background,
-		color: Colors.dark.text,
-		fontSize: 70,
-		fontWeight: "bold",
-		textAlign: "center",
-		paddingBottom: 12,
+		backgroundColor: Colors.light.background,
 	},
 	text: {
-		color: Colors.dark.text,
-		fontSize: 20,
+		color: Colors.light.text,
+		fontSize: 14,
 		textAlign: "center",
 		paddingHorizontal: 20,
-		backgroundColor: Colors.dark.background,
+		backgroundColor: Colors.light.background,
+		marginVertical: -2,
 	},
 });
 

@@ -14,17 +14,17 @@ const PrimaryButton = ({text, action}: {text: string, action: any}) => {
 
 const styles = StyleSheet.create({
     container:{
-        borderRadius: 100,
+        borderRadius: 10,
         paddingHorizontal: 25,
         paddingVertical: 14,
-        borderWidth: 2,
-        backgroundColor: Colors.dark.primary,
+        backgroundColor: Colors.light.primary,
         width: "100%",
     },
     text: {
         color: Colors.light.text,
         fontSize: 18,
         textAlign: "center",
+        fontWeight: "600",
     }
 })
 
