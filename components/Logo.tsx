@@ -1,13 +1,14 @@
 import React from "react";
 import { ThemedView } from "./ThemedView";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { Colors } from "@/constants/Colors";
+import TextLogo from "../assets/images/logofile"
 
 const Logo = ({ withText = false }) => {
 	return (
 		<ThemedView>
-			<Text style={styles.logo}>trvl</Text>
+			<TextLogo />
 			{withText && (
 				<ThemedText style={styles.text}>
 					Focus on the fun. {"\n"}We'll manage the details.
