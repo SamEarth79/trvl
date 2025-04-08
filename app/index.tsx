@@ -42,7 +42,7 @@ export default function HomeScreen() {
 	return (
 		<ThemedView style={styles.homeContainer}>
 			<View style={styles.logoContainer}>
-				<Logo width={150} height={120} withText={true} />
+				<Logo width={190} height={120} withText={true} />
 			</View>
 			<View style={styles.button}>
 				<PrimaryButton
@@ -68,6 +68,10 @@ const styles = StyleSheet.create({
 	},
 	logoContainer: {
 		paddingBottom: 20,
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	features: {
 		display: "flex",

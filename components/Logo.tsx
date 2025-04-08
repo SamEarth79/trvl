@@ -4,12 +4,14 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { Colors } from "@/constants/Colors";
 import TextLogo from "../assets/images/logofile"
+import TextLogo2 from "../assets/images/logo2file"
 
 const Logo = ({ withText = false, width, height } : {withText: Boolean, width: Number, height: Number}) => {
 	return (
 		<ThemedView style={styles.logoContainer}>
 			<View style={styles.logo}>
-				<TextLogo width={width} height={height}/>
+				{/* <TextLogo width={width} height={height}/> */}
+				<TextLogo2 width={width} height={height}/>
 			</View>
 			{withText && (
 				<>
