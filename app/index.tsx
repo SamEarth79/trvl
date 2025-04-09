@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import {
 	GoogleSignin,
 	isSuccessResponse,
@@ -6,15 +6,14 @@ import {
 	statusCodes,
 } from "@react-native-google-signin/google-signin";
 import { useEffect } from "react";
-import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import Logo from "@/components/Logo";
 import PrimaryButton from "@/components/ui/Button";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
+import {jwtDecode} from "jwt-decode";
 
 export default function HomeScreen() {
-	const navigation = useNavigation();
 	const router = useRouter();
 
 	const handleGoogleSignIn = async () => {
@@ -22,9 +21,14 @@ export default function HomeScreen() {
 			await GoogleSignin.hasPlayServices();
 			const response = await GoogleSignin.signIn();
 			if (isSuccessResponse(response)) {
-				console.log("User Info: ", response.data);
+				const decodedToken: any = jwtDecode(response?.data?.idToken||"");
+				const userEmail = decodedToken.email; // Extract the email
+				const userName = decodedToken.name.split(" ")[0] || "Unknown"; // Extract the first name
 				// Navigate to the home screen or perform any action after successful sign-in
-				router.push("/home");
+				router.push({
+					pathname: "/home",
+					params: { userEmail, userName },
+				});
 			}
 		} catch (error) {}
 	};
@@ -42,7 +46,7 @@ export default function HomeScreen() {
 	return (
 		<ThemedView style={styles.homeContainer}>
 			<View style={styles.logoContainer}>
-				<Logo width={190} height={120} withText={true} />
+				<Logo width={190} height={120} withText={true} size="large"/>
 			</View>
 			<View style={styles.button}>
 				<PrimaryButton

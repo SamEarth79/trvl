@@ -6,12 +6,15 @@ import { Colors } from "@/constants/Colors";
 import TextLogo from "../assets/images/logofile"
 import TextLogo2 from "../assets/images/logo2file"
 
-const Logo = ({ withText = false, width, height } : {withText: Boolean, width: Number, height: Number}) => {
+const Logo = ({ width, height, withText = false, size = "small" } : {withText: Boolean, width: Number, height: Number, size?: String}) => {
 	return (
 		<ThemedView style={styles.logoContainer}>
 			<View style={styles.logo}>
-				{/* <TextLogo width={width} height={height}/> */}
-				<TextLogo2 width={width} height={height}/>
+				{
+					size === "small" ? 
+					<TextLogo width={width} height={height}/> :
+					<TextLogo2 width={width} height={height}/>
+				}
 			</View>
 			{withText && (
 				<>

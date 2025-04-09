@@ -4,6 +4,8 @@ import Svg, { Path } from "react-native-svg"
 const SvgComponent = (props) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
+    width={22}
+    height={1}
     fill="none"
     viewBox="0 0 55 27"
     {...props}
