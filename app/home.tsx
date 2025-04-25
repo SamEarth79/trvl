@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import { View, Image, TouchableOpacity } from "react-native";
@@ -10,11 +10,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesone from "@expo/vector-icons/FontAwesome";
 import { LinearGradient } from 'expo-linear-gradient';
 import TravelBag from "@/assets/images/TravelBag";
-import Car from "@/assets/images/CityRoad"
+import Car from "@/assets/images/CityRoad";
+import { callBackendAPI } from "@/services/backend";
 
 export default function HomeScreen() {
 	const { userEmail, userName } = useLocalSearchParams();
 
+	const router = useRouter();
 	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState<any>(null);
 
@@ -22,20 +24,15 @@ export default function HomeScreen() {
 		if (userEmail) {
 			const fetchData = async () => {
 				try {
-					const response = await fetch(
-						"https://j2igehf7vgl4rinc2jl73leuc40nfxlv.lambda-url.us-east-1.on.aws/user",
+					const result = await callBackendAPI(
+						"POST",
+						"/user",
 						{
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify({
-								user_email: userEmail,
-								user_name: userName,
-							}),
+							user_email: userEmail,
+							user_name: userName,
 						}
 					);
-					const result = await response.json();
+					console.log("Fetched data:", result);
 					setData(result);
 				} catch (error) {
 					console.error("Error fetching data:", error);
@@ -102,7 +99,7 @@ export default function HomeScreen() {
 						paddingHorizontal: 12,
 						paddingTop: 14,
 						paddingBottom: 100,
-						width: "50%",
+						width: "45%",
 						borderRadius: 10,
 						display: "flex",
 						flexDirection: "column",
@@ -129,7 +126,12 @@ export default function HomeScreen() {
 				<Card
 					text="Create a Trip"
 					icon={<TravelBag width={180} height={125} />}
-					action={() => {}}
+					action={() => {
+						router.push({
+							pathname: "/newTrip",
+							params: { userId: data?.user?.user_id },
+						});
+					}}
 				/>
 				<Card
 					text="Join a Trip"
@@ -147,7 +149,6 @@ export default function HomeScreen() {
 			<View style={styles.bodyContainer}>
 				<Greetings />
 				<Actions />
-				{/* <Text>Data: {JSON.stringify(data)}</Text> */}
 				{data?.trips && data?.trips.length > 0 ? (
 					<TripsDisplay />
 				) : (
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		alignItems: "center",
 		width: "100%",
-		padding: 30,
+		padding: 20,
 		position: "absolute",
 		top: 0,
 		left: 0,
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.light.background,
 		gap: 20,
 		marginTop: 60,
-		padding: 30,
+		padding: 20,
 	},
 	greetingContainer: {
 		display: "flex",

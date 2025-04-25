@@ -1,14 +1,14 @@
 import { Colors } from '@/constants/Colors'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const PrimaryButton = ({text, action}: {text: string, action: any}) => {
   return (
-    <View style={styles.container} onTouchEnd={action}>
+    <TouchableOpacity style={styles.container} onPress={action}>
         <Text style={styles.text}>
             {text}
         </Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 
