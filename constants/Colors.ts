@@ -12,7 +12,9 @@ export const Colors = {
 		secondary: "#63B39B",
 		accent: "#FFE39F",
 		card_background: "#F4F6F8",
-		grey: "#F2F2F2"
+		grey: "#F2F2F2",
+		grey2: "#DDD",
+		greyText: "#A8A8A8",
 	},
 	dark: {
         text: "#EDEDED",

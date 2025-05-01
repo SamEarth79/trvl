@@ -4,14 +4,30 @@ import { Colors } from "@/constants/Colors";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
-import { View, Image, TouchableOpacity } from "react-native";
+import { View, Image, TouchableOpacity, ScrollView } from "react-native";
 import Logo from "@/components/Logo";
 import { SafeAreaView } from "react-native-safe-area-context";
-import FontAwesone from "@expo/vector-icons/FontAwesome";
-import { LinearGradient } from 'expo-linear-gradient';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { LinearGradient } from "expo-linear-gradient";
 import TravelBag from "@/assets/images/TravelBag";
 import Car from "@/assets/images/CityRoad";
 import { callBackendAPI } from "@/services/backend";
+
+// Utility function to format the date
+function formatDate(dateString: string): string {
+	const date = new Date(dateString);
+	const day = date.getDate();
+	const month = date.toLocaleString("default", { month: "long" });
+	const suffix =
+		day % 10 === 1 && day !== 11
+			? "st"
+			: day % 10 === 2 && day !== 12
+			? "nd"
+			: day % 10 === 3 && day !== 13
+			? "rd"
+			: "th";
+	return `${day}${suffix} ${month}`;
+}
 
 export default function HomeScreen() {
 	const { userEmail, userName } = useLocalSearchParams();
@@ -24,14 +40,10 @@ export default function HomeScreen() {
 		if (userEmail) {
 			const fetchData = async () => {
 				try {
-					const result = await callBackendAPI(
-						"POST",
-						"/user",
-						{
-							user_email: userEmail,
-							user_name: userName,
-						}
-					);
+					const result = await callBackendAPI("POST", "/user", {
+						user_email: userEmail,
+						user_name: userName,
+					});
 					console.log("Fetched data:", result);
 					setData(result);
 				} catch (error) {
@@ -57,7 +69,7 @@ export default function HomeScreen() {
 		return (
 			<View style={styles.headerContainer}>
 				<Logo width={60} height={60} withText={false} />
-				<FontAwesone name="bars" size={22} />
+				<FontAwesome name="bars" size={22} />
 			</View>
 		);
 	};
@@ -65,37 +77,139 @@ export default function HomeScreen() {
 	const Greetings = () => {
 		return (
 			<View style={styles.greetingContainer}>
-				<Text style={{ fontSize: 17, fontWeight: "400", color: Colors.light.primary, marginBottom: -2 }}>
-					Hey {userName}
+				<Text
+					style={{
+						fontSize: 17,
+						fontWeight: "400",
+						color: Colors.light.primary,
+						marginBottom: -2,
+					}}
+				>
+					Hey {userName},
 				</Text>
-				<Text style={{ fontSize: 24, fontWeight: "800" }}>
+				<Text
+					style={{
+						fontSize: 24,
+						fontWeight: "800",
+						color: Colors.light.text,
+					}}
+				>
 					Ready for your next trip?
 				</Text>
 			</View>
 		);
 	};
 
-	const NoTripsDisplay = () => {
-		
-		
+	const Divider = () => {
 		return (
-			<View style={styles.NoTripsContainer}>
-				
+			<View
+				style={{
+					width: "100%",
+					height: 0.8,
+					backgroundColor: Colors.light.grey2,
+					marginBottom: -4,
+				}}
+			></View>
+		);
+	};
+
+	const NoTripsDisplay = () => {
+		return <View style={styles.NoTripsContainer}></View>;
+	};
+
+	const TripsDisplay = () => {
+		return (
+			<View
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					gap: 20,
+					width: "100%",
+				}}
+			>
+				<Text style={{ fontSize: 24, fontWeight: "800" }}>
+					Your Trips
+				</Text>
+				<ScrollView
+					contentContainerStyle={{
+						display: "flex",
+						flexDirection: "column",
+						justifyContent: "center",
+						alignItems: "center",
+						gap: 20,
+						width: "100%",
+					}}
+				>
+					{data?.trips.map((trip: any) => {
+						const tripInfo = trip["Trips"];
+						const formattedDate = formatDate(tripInfo.from_date);
+
+						return (
+							<TouchableOpacity
+								key={trip.trip_id}
+								style={{
+									backgroundColor:
+										Colors.light.card_background,
+									padding: 20,
+									borderRadius: 10,
+									marginBottom: 20,
+									width: "100%",
+								}}
+								onPress={() => {
+									router.push({
+										pathname: "/trip",
+										params: {
+											user_id: data?.user?.user_id,
+											trip_id: trip.trip_id,
+										},
+									});
+								}}
+							>
+								<Text
+									style={{
+										fontSize: 20,
+										fontWeight: "600",
+										marginVertical: 4,
+									}}
+								>
+									{tripInfo.trip_name}
+								</Text>
+								<Text
+									style={{
+										fontSize: 16,
+										fontWeight: "400",
+										color: Colors.light.text,
+									}}
+								>
+									{tripInfo.trip_destination} |{" "}
+									{formattedDate}
+								</Text>
+							</TouchableOpacity>
+						);
+					})}
+				</ScrollView>
 			</View>
 		);
 	};
 
-	const TripsDisplay = () => {
-		return <View></View>;
-	};
-
 	const Actions = () => {
-
-		const Card = ({text, icon, action, primary = true} : {text: string, icon: any, action: any, primary?: Boolean}) => {
+		const Card = ({
+			text,
+			icon,
+			action,
+			primary = true,
+		}: {
+			text: string;
+			icon: any;
+			action: any;
+			primary?: Boolean;
+		}) => {
 			return (
 				<TouchableOpacity
 					style={{
-						backgroundColor: primary ? Colors.light.primary : Colors.light.secondary,
+						backgroundColor: primary
+							? Colors.light.primary
+							: Colors.light.secondary,
 						paddingHorizontal: 12,
 						paddingTop: 14,
 						paddingBottom: 100,
@@ -111,15 +225,27 @@ export default function HomeScreen() {
 					}}
 					onPress={action}
 				>
-						<Text style={{ color: Colors.light.background, fontSize: 18, fontWeight: "600" }}>
-							{text}
-						</Text>
-						<View style={{position: "absolute", right: -32, bottom: -20}}>
-							{icon}
-						</View>
+					<Text
+						style={{
+							color: Colors.light.background,
+							fontSize: 18,
+							fontWeight: "600",
+						}}
+					>
+						{text}
+					</Text>
+					<View
+						style={{
+							position: "absolute",
+							right: -32,
+							bottom: -20,
+						}}
+					>
+						{icon}
+					</View>
 				</TouchableOpacity>
-			)
-		}
+			);
+		};
 
 		return (
 			<View style={styles.actionsContainer}>
@@ -140,8 +266,8 @@ export default function HomeScreen() {
 					primary={false}
 				/>
 			</View>
-		)
-	}
+		);
+	};
 
 	return (
 		<SafeAreaView style={styles.homeContainer}>
@@ -149,6 +275,7 @@ export default function HomeScreen() {
 			<View style={styles.bodyContainer}>
 				<Greetings />
 				<Actions />
+				<Divider />
 				{data?.trips && data?.trips.length > 0 ? (
 					<TripsDisplay />
 				) : (
@@ -221,6 +348,6 @@ const styles = StyleSheet.create({
 		justifyContent: "space-around",
 		alignItems: "center",
 		gap: 20,
-		width: "100%",	
-	}
+		width: "100%",
+	},
 });
